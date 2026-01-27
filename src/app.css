@@ -1,0 +1,55 @@
+@import 'tailwindcss';
+
+:root {
+	--color-primary: #f59e0b;
+	--color-primary-light: #fbbf24;
+	--color-bg: #fffbeb;
+}
+
+html, body {
+	height: 100%;
+	overflow: hidden;
+}
+
+body {
+	font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+	background-color: var(--color-bg);
+}
+
+/* 大きなタップターゲット */
+.tap-target {
+	min-width: 60px;
+	min-height: 60px;
+}
+
+/* 練習文字の大きさ */
+.kana-large {
+	font-size: 120px;
+	line-height: 1;
+}
+
+.kana-medium {
+	font-size: 80px;
+	line-height: 1;
+}
+
+/* アニメーション */
+@keyframes bounce-in {
+	0% { transform: scale(0.8); opacity: 0; }
+	50% { transform: scale(1.05); }
+	100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-bounce-in {
+	animation: bounce-in 0.3s ease-out;
+}
+
+@keyframes shake {
+	0%, 100% { transform: translateX(0); }
+	25% { transform: translateX(-5px); }
+	75% { transform: translateX(5px); }
+}
+
+.animate-shake {
+	animation: shake 0.3s ease-in-out;
+}
