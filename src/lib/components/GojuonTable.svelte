@@ -37,6 +37,7 @@
 
 	const rows = $derived(isHiragana() ? seionRows : katakanaSeionRows);
 	const dakuRows = $derived(isHiragana() ? dakuonRows : katakanaDakuonRows);
+	const yoon = $derived(getYoonKana());
 </script>
 
 <div class="gojuon-table space-y-6">
@@ -83,7 +84,6 @@
 	</section>
 
 	<!-- 拗音 -->
-	{@const yoon = getYoonKana()}
 	{#if yoon.length > 0}
 		<section>
 			<h3 class="text-lg font-bold text-amber-700 mb-2">ようおん</h3>
