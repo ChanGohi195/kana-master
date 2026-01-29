@@ -13,15 +13,15 @@
 	} = $props();
 
 	const sizeClasses = {
-		sm: 'text-xl',
-		md: 'text-2xl',
-		lg: 'text-4xl'
+		sm: 'text-sm',
+		md: 'text-lg',
+		lg: 'text-2xl'
 	};
 </script>
 
 <span class="growth-icon inline-flex items-center gap-1" title={getGrowthLabel(level)}>
 	<span class={sizeClasses[size]}>{getGrowthIcon(level)}</span>
 	{#if showLabel}
-		<span class="text-base text-gray-600">{getGrowthLabel(level)}</span>
+		<span class="text-sm text-[var(--color-text-secondary)]">{getGrowthLabel(level)}</span>
 	{/if}
 </span>

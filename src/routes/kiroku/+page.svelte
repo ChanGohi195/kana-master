@@ -61,56 +61,55 @@
 	<!-- ヘッダー -->
 	<header class="flex items-center gap-4 mb-6">
 		<BackButton href="/" />
-		<h1 class="text-2xl font-bold text-amber-700">きろく</h1>
+		<h1 class="text-xl font-bold text-[var(--color-text)]">きろく</h1>
 	</header>
 
 	<!-- 総合統計 -->
-	<section class="bg-white rounded-2xl p-4 mb-6 shadow-md">
-		<h2 class="text-xl font-bold text-amber-700 mb-4">ぜんぶの きろく</h2>
+	<section class="bg-[var(--color-surface)] rounded-xl p-4 mb-4 border-2 border-[var(--color-border)]">
 		<div class="flex justify-around text-center">
 			<div>
-				<div class="text-3xl font-bold text-amber-600">{formatTime(totalTime)}</div>
-				<div class="text-sm text-gray-600">べんきょうじかん</div>
+				<div class="text-2xl font-bold text-[var(--color-text)]">{formatTime(totalTime)}</div>
+				<div class="text-sm text-[var(--color-text-secondary)]">べんきょうじかん</div>
 			</div>
 			<div>
-				<div class="text-3xl font-bold text-amber-600">{totalCount}</div>
-				<div class="text-sm text-gray-600">もんだいすう</div>
+				<div class="text-2xl font-bold text-[var(--color-text)]">{totalCount}</div>
+				<div class="text-sm text-[var(--color-text-secondary)]">もんだいすう</div>
 			</div>
 		</div>
 	</section>
 
 	<!-- 週間グラフ -->
-	<section class="bg-white rounded-2xl p-4 mb-6 shadow-md">
-		<h2 class="text-xl font-bold text-amber-700 mb-4">1しゅうかん</h2>
-		<div class="flex items-end justify-around h-32 gap-2">
+	<section class="bg-[var(--color-surface)] rounded-xl p-4 mb-4 border-2 border-[var(--color-border)]">
+		<h2 class="text-base font-bold text-[var(--color-text)] mb-3">1しゅうかん</h2>
+		<div class="flex items-end justify-around h-28 gap-2">
 			{#each dailyStats as stat}
 				<div class="flex-1 flex flex-col items-center">
 					<div
-						class="w-full bg-amber-400 rounded-t-lg transition-all"
-						style="height: {(stat.count / maxCount) * 100}%;"
+						class="w-full bg-[var(--color-primary)] rounded-t transition-all"
+						style="height: {(stat.count / maxCount) * 100}%; min-height: {stat.count > 0 ? '4px' : '0'};"
 					></div>
-					<div class="text-xs text-gray-500 mt-1">{formatDate(stat.date)}</div>
-					<div class="text-xs font-bold text-amber-600">{stat.count}</div>
+					<div class="text-xs text-[var(--color-muted)] mt-1">{formatDate(stat.date)}</div>
+					<div class="text-xs font-bold text-[var(--color-text)]">{stat.count}</div>
 				</div>
 			{/each}
 		</div>
 	</section>
 
 	<!-- 成長レベル分布 -->
-	<section class="bg-white rounded-2xl p-4 shadow-md">
-		<h2 class="text-xl font-bold text-amber-700 mb-4">せいちょう</h2>
-		<div class="space-y-3">
+	<section class="bg-[var(--color-surface)] rounded-xl p-4 border-2 border-[var(--color-border)]">
+		<h2 class="text-base font-bold text-[var(--color-text)] mb-3">せいちょう</h2>
+		<div class="space-y-2">
 			{#each growthLevels as level}
-				<div class="flex items-center gap-3">
-					<span class="text-2xl w-8">{getGrowthIcon(level)}</span>
-					<span class="text-sm text-gray-600 w-28">{getGrowthLabel(level)}</span>
-					<div class="flex-1 bg-gray-100 rounded-full h-4 overflow-hidden">
+				<div class="flex items-center gap-2">
+					<span class="text-base w-6">{getGrowthIcon(level)}</span>
+					<span class="text-xs text-[var(--color-text-secondary)] w-20">{getGrowthLabel(level)}</span>
+					<div class="flex-1 bg-gray-100 rounded-full h-3 overflow-hidden">
 						<div
-							class="h-full bg-amber-400 rounded-full transition-all"
+							class="h-full bg-[var(--color-primary)] rounded-full transition-all"
 							style="width: {(growthCounts[level] / 214) * 100}%;"
 						></div>
 					</div>
-					<span class="text-sm font-bold text-amber-600 w-8 text-right">
+					<span class="text-xs font-bold text-[var(--color-text)] w-6 text-right">
 						{growthCounts[level]}
 					</span>
 				</div>

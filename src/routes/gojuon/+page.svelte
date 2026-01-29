@@ -13,7 +13,6 @@
 	let progressMap = $state<Record<string, GrowthLevel>>({});
 
 	onMount(async () => {
-		// データ読み込み
 		const [hiraganaRes, katakanaRes] = await Promise.all([
 			fetch('/data/hiragana.json'),
 			fetch('/data/katakana.json')
@@ -21,7 +20,6 @@
 		hiraganaList = await hiraganaRes.json();
 		katakanaList = await katakanaRes.json();
 
-		// 進捗読み込み
 		const progress = await getAllProgress();
 		for (const p of progress) {
 			progressMap[p.kanaId] = p.growthLevel;
@@ -47,7 +45,7 @@
 	<!-- ヘッダー -->
 	<header class="flex items-center gap-4 mb-4">
 		<BackButton href="/" />
-		<h1 class="text-2xl font-bold text-amber-700">ごじゅうおんひょう</h1>
+		<h1 class="text-xl font-bold text-[var(--color-text)]">もじを えらぶ</h1>
 	</header>
 
 	<!-- タイプ切り替え -->
@@ -65,7 +63,7 @@
 			/>
 		{:else}
 			<div class="flex items-center justify-center h-64">
-				<span class="text-2xl text-amber-400">よみこみちゅう...</span>
+				<span class="text-lg text-[var(--color-muted)]">よみこみちゅう...</span>
 			</div>
 		{/if}
 	</div>

@@ -1,0 +1,214 @@
+/* =================================================================
+   かなマスター デザインシステム
+   ミニマル・2色・余白重視
+   ================================================================= */
+
+/* -----------------------------------------------------------------
+   1. カラーパレット（2色 + グレー）
+   ----------------------------------------------------------------- */
+:root {
+	/* プライマリカラー */
+	--color-primary: #2563eb;        /* 青: メインアクション */
+	--color-primary-hover: #1d4ed8;  /* 青: ホバー */
+	--color-primary-light: #dbeafe; /* 青: 薄い背景 */
+
+	/* 正解フィードバック */
+	--color-correct: #16a34a;        /* 緑: 正解 */
+	--color-correct-light: #dcfce7; /* 緑: 薄い背景 */
+
+	/* 不正解フィードバック */
+	--color-incorrect: #dc2626;      /* 赤: 不正解 */
+	--color-incorrect-light: #fee2e2;
+
+	/* グレースケール */
+	--color-bg: #fafafa;             /* 背景: ほぼ白 */
+	--color-surface: #ffffff;        /* カード・ボタン背景 */
+	--color-text: #1f2937;           /* テキスト: ほぼ黒 */
+	--color-text-secondary: #6b7280; /* セカンダリテキスト */
+	--color-muted: #9ca3af;          /* 薄いグレー: 補助 */
+	--color-border: #e5e7eb;         /* ボーダー */
+	--color-border-focus: #93c5fd;   /* フォーカス時ボーダー */
+
+	/* お手本文字 */
+	--color-guide: #d1d5db;          /* お手本文字色 */
+}
+
+/* -----------------------------------------------------------------
+   2. タイポグラフィ
+   ----------------------------------------------------------------- */
+:root {
+	/* フォントファミリー */
+	--font-main: "Klee One", "UD Digi Kyokasho NK-R", "Hiragino Kaku Gothic ProN", serif;
+
+	/* フォントサイズ */
+	--text-xs: 12px;
+	--text-sm: 14px;
+	--text-base: 16px;
+	--text-lg: 18px;
+	--text-xl: 20px;
+	--text-2xl: 24px;
+	--text-3xl: 30px;
+	--text-4xl: 36px;
+
+	/* 練習文字サイズ */
+	--text-kana-cell: 40px;          /* 五十音表セル */
+	--text-kana-large: 160px;        /* 練習文字（大） */
+	--text-kana-canvas: 75%;         /* Canvasお手本（Canvas幅の75%） */
+
+	/* 行間 */
+	--line-height: 1.8;
+	--line-height-tight: 1.4;
+}
+
+/* -----------------------------------------------------------------
+   3. スペーシング・サイズ
+   ----------------------------------------------------------------- */
+:root {
+	/* タップターゲット */
+	--tap-target-min: 60px;          /* 最小タップターゲット */
+	--tap-target-large: 80px;        /* 大きなボタン */
+	--tap-target-xl: 100px;          /* 特大ボタン */
+
+	/* Canvas */
+	--canvas-size: min(90vw, 400px); /* Canvas: 画面幅の90%、最大400px */
+
+	/* スペーシング */
+	--space-xs: 4px;
+	--space-sm: 8px;
+	--space-md: 16px;
+	--space-lg: 24px;
+	--space-xl: 32px;
+	--space-2xl: 48px;
+
+	/* 角丸 */
+	--radius-sm: 8px;
+	--radius-md: 12px;
+	--radius-lg: 16px;
+	--radius-xl: 24px;
+	--radius-full: 9999px;
+
+	/* ボタン間隔 */
+	--button-gap: 16px;
+}
+
+/* -----------------------------------------------------------------
+   4. トランジション
+   ----------------------------------------------------------------- */
+:root {
+	--transition-fast: 150ms ease;
+	--transition-normal: 200ms ease;
+	--transition-slow: 300ms ease;
+}
+
+/* -----------------------------------------------------------------
+   5. ベーススタイル
+   ----------------------------------------------------------------- */
+html, body {
+	height: 100%;
+	overflow: hidden;
+}
+
+body {
+	font-family: var(--font-main);
+	font-size: var(--text-lg);
+	line-height: var(--line-height);
+	color: var(--color-text);
+	background-color: var(--color-bg);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* -----------------------------------------------------------------
+   6. ユーティリティクラス
+   ----------------------------------------------------------------- */
+
+/* タップターゲット */
+.tap-target {
+	min-width: var(--tap-target-min);
+	min-height: var(--tap-target-min);
+}
+
+.tap-target-lg {
+	min-width: var(--tap-target-large);
+	min-height: var(--tap-target-large);
+}
+
+.tap-target-xl {
+	min-width: var(--tap-target-xl);
+	min-height: var(--tap-target-xl);
+}
+
+/* 練習文字サイズ */
+.kana-large {
+	font-size: var(--text-kana-large);
+	line-height: 1;
+	font-family: var(--font-main);
+}
+
+.kana-cell {
+	font-size: var(--text-kana-cell);
+	line-height: 1;
+	font-family: var(--font-main);
+}
+
+/* -----------------------------------------------------------------
+   7. アニメーション
+   ----------------------------------------------------------------- */
+@keyframes fade-in {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes scale-in {
+	from {
+		opacity: 0;
+		transform: scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+@keyframes shake {
+	0%, 100% { transform: translateX(0); }
+	25% { transform: translateX(-4px); }
+	75% { transform: translateX(4px); }
+}
+
+.animate-fade-in {
+	animation: fade-in 0.2s ease-out;
+}
+
+.animate-scale-in {
+	animation: scale-in 0.2s ease-out;
+}
+
+.animate-shake {
+	animation: shake 0.3s ease-in-out;
+}
+
+/* -----------------------------------------------------------------
+   8. フォーカス・アクセシビリティ
+   ----------------------------------------------------------------- */
+:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: 2px;
+}
+
+button:active:not(:disabled) {
+	transform: scale(0.98);
+}
+
+/* タッチデバイス用 */
+@media (hover: none) {
+	button:active:not(:disabled) {
+		transform: scale(0.97);
+	}
+}

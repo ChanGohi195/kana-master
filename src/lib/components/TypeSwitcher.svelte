@@ -14,21 +14,21 @@
 	}
 </script>
 
-<div class="flex gap-2 p-1 bg-amber-100 rounded-xl">
+<div class="flex gap-1 p-1 bg-gray-100 rounded-xl border-2 border-[var(--color-border)]">
 	<button
-		class="flex-1 py-3 px-6 rounded-lg text-xl font-bold transition-all tap-target
+		class="flex-1 py-3 px-6 rounded-lg text-lg font-bold transition-all tap-target
 			   {selected === 'hiragana'
-				   ? 'bg-amber-500 text-white shadow-md'
-				   : 'bg-transparent text-amber-700 hover:bg-amber-200'}"
+				   ? 'bg-[var(--color-primary)] text-white'
+				   : 'bg-transparent text-[var(--color-text-secondary)] hover:bg-gray-200'}"
 		onclick={() => handleClick('hiragana')}
 	>
 		ひらがな
 	</button>
 	<button
-		class="flex-1 py-3 px-6 rounded-lg text-xl font-bold transition-all tap-target
+		class="flex-1 py-3 px-6 rounded-lg text-lg font-bold transition-all tap-target
 			   {selected === 'katakana'
-				   ? 'bg-amber-500 text-white shadow-md'
-				   : 'bg-transparent text-amber-700 hover:bg-amber-200'}"
+				   ? 'bg-[var(--color-primary)] text-white'
+				   : 'bg-transparent text-[var(--color-text-secondary)] hover:bg-gray-200'}"
 		onclick={() => handleClick('katakana')}
 	>
 		カタカナ

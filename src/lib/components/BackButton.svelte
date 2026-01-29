@@ -1,20 +1,26 @@
 <script lang="ts">
 	let {
-		href = '/',
-		label = 'もどる'
+		href = '/'
 	}: {
 		href?: string;
-		label?: string;
 	} = $props();
 </script>
 
 <a
 	{href}
-	class="inline-flex items-center gap-2 px-4 py-2
-		   bg-amber-100 hover:bg-amber-200 active:bg-amber-300
-		   text-amber-800 font-bold rounded-xl
+	class="inline-flex items-center justify-center
+		   w-12 h-12
+		   bg-[var(--color-surface)] hover:bg-gray-100
+		   text-[var(--color-text)] font-bold rounded-xl
+		   border-2 border-[var(--color-border)]
 		   transition-all tap-target"
+	aria-label="もどる"
 >
-	<span class="text-xl">←</span>
-	<span>{label}</span>
+	<span class="text-2xl">←</span>
 </a>
+
+<style>
+	a:active {
+		transform: scale(0.95);
+	}
+</style>

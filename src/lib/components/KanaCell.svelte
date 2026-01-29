@@ -16,22 +16,28 @@
 <button
 	class="kana-cell relative flex flex-col items-center justify-center
 		   w-full aspect-square rounded-xl
-		   bg-white hover:bg-amber-50 active:bg-amber-100
-		   border-2 border-amber-200 hover:border-amber-400
-		   shadow-sm hover:shadow-md
+		   bg-[var(--color-surface)] hover:bg-gray-50
+		   border-2 border-[var(--color-border)] hover:border-[var(--color-primary)]
 		   transition-all tap-target"
 	{onclick}
 >
-	<span class="text-3xl sm:text-4xl font-bold text-gray-800">
+	<span class="kana-cell-char text-[var(--color-text)]" style="font-family: var(--font-main);">
 		{kana.character}
 	</span>
-	<span class="absolute top-1 right-1">
-		<GrowthIcon level={growthLevel} size="sm" />
-	</span>
+	{#if growthLevel > 0}
+		<span class="absolute top-0.5 right-0.5 text-xs opacity-70">
+			<GrowthIcon level={growthLevel} size="sm" />
+		</span>
+	{/if}
 </button>
 
 <style>
 	.kana-cell:active {
 		transform: scale(0.95);
+	}
+	.kana-cell-char {
+		font-size: clamp(28px, 8vw, 40px);
+		font-weight: 400;
+		line-height: 1;
 	}
 </style>

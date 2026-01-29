@@ -3,47 +3,65 @@
 	import { getStroke } from 'perfect-freehand';
 
 	let {
-		width = 280,
-		height = 280,
 		character = '',
-		strokeColor = '#333333',
+		expectedStrokeCount = 0,
+		strokeColor = '#1f2937',
 		strokeWidth = 4,
-		backgroundColor = '#ffffff',
-		guideColor = '#e0e0e0',
-		showGuide = true,
-		guideOpacity = 0.3,
+		guideOpacity = 0.25,
 		disabled = false,
-		onStrokeEnd = (strokes: number[][][]) => {}
+		onStrokeEnd = (strokes: number[][][]) => {},
+		onStrokeCountChange = (count: number) => {}
 	}: {
-		width?: number;
-		height?: number;
 		character?: string;
+		expectedStrokeCount?: number;
 		strokeColor?: string;
 		strokeWidth?: number;
-		backgroundColor?: string;
-		guideColor?: string;
-		showGuide?: boolean;
 		guideOpacity?: number;
 		disabled?: boolean;
 		onStrokeEnd?: (strokes: number[][][]) => void;
+		onStrokeCountChange?: (count: number) => void;
 	} = $props();
 
+	let containerEl: HTMLDivElement;
 	let canvas: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D | null = null;
 	let isDrawing = false;
 	let currentPoints: number[][] = [];
 	let allStrokes: number[][][] = [];
+	let canvasSize = $state(280);
 
 	onMount(() => {
+		// 動的サイズ計算
+		updateCanvasSize();
+		window.addEventListener('resize', updateCanvasSize);
+
 		ctx = canvas.getContext('2d');
 		if (ctx) {
+			redraw();
+		}
+
+		return () => {
+			window.removeEventListener('resize', updateCanvasSize);
+		};
+	});
+
+	function updateCanvasSize() {
+		// 90vw、最大400px
+		const vw90 = window.innerWidth * 0.9;
+		canvasSize = Math.min(vw90, 400);
+	}
+
+	$effect(() => {
+		if (ctx && character !== undefined) {
 			redraw();
 		}
 	});
 
 	$effect(() => {
-		if (ctx && character !== undefined) {
-			redraw();
+		if (canvas && canvasSize) {
+			canvas.width = canvasSize;
+			canvas.height = canvasSize;
+			if (ctx) redraw();
 		}
 	});
 
@@ -80,53 +98,56 @@
 		if (currentPoints.length > 1) {
 			allStrokes.push([...currentPoints]);
 			onStrokeEnd(allStrokes);
+			onStrokeCountChange(allStrokes.length);
 		}
 		currentPoints = [];
 		redraw();
 	}
 
 	function redraw() {
-		if (!ctx) return;
+		if (!ctx || !canvas) return;
 
-		// 背景
-		ctx.fillStyle = backgroundColor;
-		ctx.fillRect(0, 0, canvas.width, canvas.height);
+		const w = canvas.width;
+		const h = canvas.height;
 
-		// お手本文字（半透明で下地に）
+		// 背景（白）
+		ctx.fillStyle = '#ffffff';
+		ctx.fillRect(0, 0, w, h);
+
+		// お手本文字（Klee One教科書体）
 		if (character && guideOpacity > 0) {
 			ctx.save();
 			ctx.globalAlpha = guideOpacity;
-			ctx.fillStyle = '#999999';
-			ctx.font = `bold ${canvas.width * 0.75}px "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif`;
+			ctx.fillStyle = '#9ca3af';
+			// Klee Oneフォントを使用
+			ctx.font = `${w * 0.75}px "Klee One", serif`;
 			ctx.textAlign = 'center';
 			ctx.textBaseline = 'middle';
-			ctx.fillText(character, canvas.width / 2, canvas.height / 2);
+			ctx.fillText(character, w / 2, h / 2);
 			ctx.restore();
 		}
 
-		// ガイド線
-		if (showGuide) {
-			ctx.strokeStyle = guideColor;
-			ctx.lineWidth = 2;
-			ctx.setLineDash([8, 8]);
+		// ガイド線（十字）
+		ctx.strokeStyle = '#e5e7eb';
+		ctx.lineWidth = 1;
+		ctx.setLineDash([6, 6]);
 
-			ctx.beginPath();
-			ctx.moveTo(canvas.width / 2, 0);
-			ctx.lineTo(canvas.width / 2, canvas.height);
-			ctx.stroke();
+		ctx.beginPath();
+		ctx.moveTo(w / 2, 0);
+		ctx.lineTo(w / 2, h);
+		ctx.stroke();
 
-			ctx.beginPath();
-			ctx.moveTo(0, canvas.height / 2);
-			ctx.lineTo(canvas.width, canvas.height / 2);
-			ctx.stroke();
-
-			ctx.setLineDash([]);
-			ctx.strokeStyle = '#fbbf24';
-			ctx.lineWidth = 4;
-			ctx.strokeRect(2, 2, canvas.width - 4, canvas.height - 4);
-		}
+		ctx.beginPath();
+		ctx.moveTo(0, h / 2);
+		ctx.lineTo(w, h / 2);
+		ctx.stroke();
 
 		ctx.setLineDash([]);
+
+		// 外枠（青）
+		ctx.strokeStyle = 'var(--color-primary, #2563eb)';
+		ctx.lineWidth = 3;
+		ctx.strokeRect(1.5, 1.5, w - 3, h - 3);
 
 		// 描いたストローク
 		for (const stroke of allStrokes) {
@@ -168,6 +189,7 @@
 	export function clear() {
 		allStrokes = [];
 		currentPoints = [];
+		onStrokeCountChange(0);
 		redraw();
 	}
 
@@ -184,6 +206,7 @@
 			allStrokes.pop();
 			redraw();
 			onStrokeEnd(allStrokes);
+			onStrokeCountChange(allStrokes.length);
 		}
 	}
 
@@ -191,29 +214,41 @@
 		return allStrokes.length > 0;
 	}
 
-	export function setGuideOpacity(opacity: number) {
-		guideOpacity = opacity;
-		redraw();
+	export function getCanvasElement(): HTMLCanvasElement {
+		return canvas;
+	}
+
+	// ストローク数の差を取得（手書き判定用）
+	export function getStrokeDifference(): number {
+		if (expectedStrokeCount === 0) return 0;
+		return allStrokes.length - expectedStrokeCount;
 	}
 </script>
 
-<canvas
-	bind:this={canvas}
-	{width}
-	{height}
-	class="touch-none select-none rounded-2xl shadow-lg"
-	class:cursor-crosshair={!disabled}
-	class:cursor-not-allowed={disabled}
-	class:opacity-50={disabled}
-	onpointerdown={handlePointerDown}
-	onpointermove={handlePointerMove}
-	onpointerup={handlePointerUp}
-	onpointerleave={handlePointerUp}
-	onpointercancel={handlePointerUp}
-></canvas>
+<div
+	bind:this={containerEl}
+	class="canvas-container flex items-center justify-center"
+>
+	<canvas
+		bind:this={canvas}
+		width={canvasSize}
+		height={canvasSize}
+		class="touch-none select-none rounded-xl"
+		class:cursor-crosshair={!disabled}
+		class:cursor-not-allowed={disabled}
+		class:opacity-50={disabled}
+		style="width: {canvasSize}px; height: {canvasSize}px;"
+		onpointerdown={handlePointerDown}
+		onpointermove={handlePointerMove}
+		onpointerup={handlePointerUp}
+		onpointerleave={handlePointerUp}
+		onpointercancel={handlePointerUp}
+	></canvas>
+</div>
 
 <style>
 	canvas {
 		touch-action: none;
+		background: white;
 	}
 </style>
